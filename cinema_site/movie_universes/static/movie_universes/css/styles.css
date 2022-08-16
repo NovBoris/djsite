@@ -37,6 +37,7 @@ div.article-panel {
     box-sizing: border-box;
     overflow: hidden;
     color: #555;
+    background: #71bdb2;
 }
 
 div.article-panel p.first {
@@ -126,7 +127,6 @@ ul.mainmenu li a {
 	list-style: none;
 	font-size: 20px;
 	background: #eee;
-	background: url('../images/img_2.png')
 }
 
 .left-chapters ul li {
@@ -150,7 +150,6 @@ ul.mainmenu li a {
 	width: 100%;
 	min-height: 100%;
 	box-sizing: border-box;
-	background: #eee;
 }
 
 
@@ -231,6 +230,12 @@ ul.mainmenu li a {
 
 .empty-blank {
     padding: 100px;
-    background: #000;
+    min-height: 100%;
     background: url('../images/img.png');
+}
+
+
+.video_content {
+    background: url('../images/img_1.png');
+    height: 450px;
 }

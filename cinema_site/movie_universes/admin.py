@@ -11,7 +11,7 @@ class MovieUniversesAdmin(admin.ModelAdmin):
     list_editable = ('is_published',)
     list_filter = ('is_published', 'time_create')
     prepopulated_fields = {"slug": ("title",)}
-    fields = ('title', 'slug', 'cat', 'content', 'photo', 'get_html_photo', 'is_published', 'time_create', 'time_update')
+    fields = ('title', 'slug', 'cat', 'content', 'photo', 'get_html_photo', 'video_url', 'is_published', 'time_create', 'time_update')
     readonly_fields = ('time_create', 'time_update', 'get_html_photo')
     save_on_top = False
 
@@ -29,8 +29,15 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'post', 'created', 'active')
+    list_filter = ('active', 'created', 'updated')
+    search_fields = ('name', 'email', 'body')
+
+
 admin.site.register(MovieInformation, MovieUniversesAdmin)
 admin.site.register(MovieUniverses, CategoryAdmin)
+admin.site.register(Comment, CommentAdmin)
 
 admin.site.site_title = 'Админ панель Кино'
 admin.site.site_header = 'Админ панель Кино'

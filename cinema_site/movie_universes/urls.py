@@ -12,4 +12,5 @@ urlpatterns = [
     path('register/', RegisterUser.as_view(), name='register'),
     path('post/<slug:post_slug>/', ShowPost.as_view(), name='post'),
     path('universe/<slug:cat_slug>/', CinemaCategory.as_view(), name='universe'),
+    path('add_comment/', AddComment.as_view(), name='add_comment'),
 ]

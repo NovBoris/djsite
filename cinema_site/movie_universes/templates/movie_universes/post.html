@@ -1,11 +1,41 @@
 {% extends 'movie_universes/base.html' %}
 
 {% block content %}
-<h1>{{post.title}}</h1>
 
+<h1>{{post.title}}</h1>
 {% if post.photo %}
 <p><img class="img-article-left" src="{{post.photo.url}}"></p>
 {% endif %}
 
+
 {{post.content|linebreaks}}
+
+<div class="video_content" style="text-align: center">
+    <h1>Трейлер {{post.title}}</h1>
+    <iframe width="560" height="315" src="{{post.video_url}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+
+{% with comments.count as total_comments %}
+    <h2>
+        {{ total_comments }} comment{{ total_comments|pluralize }}
+    </h2>
+{% endwith %}
+
+{% for comment in comments %}
+    <div class="comment">
+        <p class="info">
+            Комментарий {{ forloop.counter }}
+            от {{ comment.name }}
+            {{ comment.created }}
+        </p>
+        {{ comment.body|linebreaks }}
+    </div>
+{% empty %}
+    <p>There are no comments yet.</p>
+{% endfor %}
+{% if button %}
+<a href="{% url button.url_name %}">{{button.title}}</a>
+{% endif %}
+
 {% endblock %}

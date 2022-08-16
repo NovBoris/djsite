@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, FormView
+from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import *
@@ -59,15 +60,20 @@ def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
 
 
-class ShowPost(DataMixin, DetailView):
+class ShowPost(DataMixin, FormMixin, DetailView):
     model = MovieInformation
     template_name = 'movie_universes/post.html'
     slug_url_kwarg = 'post_slug'
     context_object_name = 'post'
+    form_class = CommentForm
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title=context['post'])
+        comments = Comment.objects.filter(post=context['post'], active=True)
+        context['comments'] = comments
+        button = {'title': "Добавить комментарий", 'url_name': 'add_comment/' + (str(self.request).split('/'))[2] + '/'}
+        context['button'] = button
         return dict(list(context.items()) + list(c_def.items()))
 
 
@@ -120,3 +126,18 @@ class LoginUser(DataMixin, LoginView):
 def LogoutUser(request):
     logout(request)
     return redirect('login')
+
+
+class AddComment(LoginRequiredMixin, DataMixin, CreateView):
+    form_class = CommentForm
+    template_name = 'movie_universes/add_comments.html'
+    slug_url_kwarg = 'com_post'
+    success_url = reverse_lazy('home')
+    login_url = reverse_lazy('home')
+    raise_exception = True
+    initial = {'post': 0}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Добавить комментарий")
+        return dict(list(context.items()) + list(c_def.items()))
